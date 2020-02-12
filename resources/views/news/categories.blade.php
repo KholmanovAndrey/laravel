@@ -1,14 +1,14 @@
 @extends('layouts.main')
 
 @section('content')
-    <h1>Новости сайта</h1>
+    <h1>Категории новостей сайта</h1>
 
     <section class="news">
         <?php
-        foreach ($news as $item) {
+        foreach ($categories as $item) {
         ?>
         <article class="news__item">
-            <h2><a href="{{ route('news.newsOne', ['id' => $item['id']]) }}">{{ $item['title'] }}</a></h2>
+            <h2><a href="/news/category/{{ $item['id'] }}">{{ $item['title'] }}</a></h2>
         </article>
         <?php
         }

@@ -11,14 +11,26 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
+Route::get('/', 'HomeController@index')->name('home');
+
+Route::group([
+    'prefix' => 'admin',
+    'namespace' => 'admin',
+    'as' => 'admin.'
+], function() {
+    Route::get('/index', 'IndexController@index')->name('index');
 });
 
-Route::get('/news', function () {
-    return view('news/index');
+Route::group([
+    'prefix' => 'news',
+    'as' => 'news.'
+], function() {
+    Route::get('/', 'NewsController@news')->name('all');
+    Route::get('/categories', 'NewsController@categories')->name('categories');
+    Route::get('/category/{id}', 'NewsController@category')->name('category');
+    Route::get('/{id}', 'NewsController@newsOne')->name('newsOne');
 });
 
 Route::get('/contact', function () {
-    return view('news/index');
+    return view('contact');
 });
