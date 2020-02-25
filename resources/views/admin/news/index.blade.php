@@ -1,16 +1,13 @@
-@extends('layouts.main')
-
-@section('title')
-    Новости
-@endsection
+@extends('layouts.admin')
 
 @section('content')
-    <h1>Новости сайта</h1>
-
+    <h1>Список новостей</h1>
+    <a href="{{ route('admin.news.create') }}">Добавить</a>
     <section class="news">
         @forelse($news as $item)
             <article class="news__item">
-                <h2><a href="{{ route('news.newsOne', ['id' => $item['id']]) }}">{{ $item['title'] }}</a></h2>
+                <h2>{{ $item['title'] }}</h2>
+                <a href="{{ route('admin.news.update', ['id' => $item['id']]) }}">Редактировать</a>
             </article>
         @empty
             <div class="news__item">
