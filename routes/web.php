@@ -18,7 +18,10 @@ Route::group([
     'namespace' => 'admin',
     'as' => 'admin.'
 ], function() {
-    Route::get('/index', 'IndexController@index')->name('index');
+    Route::get('/admin/index', 'IndexController@index')->name('index');
+    Route::get('/news/index', 'NewsController@index')->name('news.index');
+    Route::get('/news/create', 'NewsController@create')->name('news.create');
+    Route::get('/news/update/{id}', 'NewsController@update')->name('news.update');
 });
 
 Route::group([
@@ -27,10 +30,8 @@ Route::group([
 ], function() {
     Route::get('/', 'NewsController@news')->name('all');
     Route::get('/categories', 'NewsController@categories')->name('categories');
-    Route::get('/category/{id}', 'NewsController@category')->name('category');
+    Route::get('/category/{id}', 'NewsController@categoryId')->name('categoryId');
     Route::get('/{id}', 'NewsController@newsOne')->name('newsOne');
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/contact', 'ContactController@index')->name('contact');

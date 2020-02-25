@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <h1>Новости сайта</h1>
+    <h1>Новости категории {{ $category['title'] }}</h1>
 
     <section class="news">
         @forelse($news as $item)

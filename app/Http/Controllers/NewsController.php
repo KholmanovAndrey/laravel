@@ -2,91 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\News;
 use Illuminate\Http\Request;
 
 class NewsController extends Controller
 {
-    private $categories = [
-        [
-            'id' => 1,
-            'title' => 'Category 1'
-        ],
-        [
-            'id' => 2,
-            'title' => 'Category 2'
-        ],
-    ];
-
-    private $news = [
-        [
-            'id' => 1,
-            'category_id' => 1,
-            'title' => 'News 1',
-            'text' => 'This one news and it\'s very good'
-        ],
-        [
-            'id' => 2,
-            'category_id' => 2,
-            'title' => 'News 2',
-            'text' => 'This second news and it\'s bad'
-        ],
-    ];
-
     public function news()
     {
-        return view('news.index', ['news' => $this->news]);
+        return view('news.index', ['news' => News::$news]);
     }
 
     public function newsOne($id)
     {
-        $news = $this->getItemById($this->news, $id);
-        $category = $this->getItemById($this->categories, $news['category_id']);
-
-        if (empty($news)){
+        if (empty(News::$news)){
             return redirect(route('home'));
         }
 
         return view('news.one', [
-            'news' => $news,
-            'category' => $category,
+            'news' => News::$news[$id],
+            'category' => News::$categories[News::$news[$id]['category_id']],
         ]);
     }
 
     public function categories()
     {
-        return view('news.categories', ['categories' => $this->categories]);
+        return view('news.categories', ['categories' => News::$categories]);
     }
 
-    public function category($id)
+    public function categoryId($id)
     {
-        $category = $this->getItemById($this->categories, $id);
-        $news = $this->getNewsByCategoryId($this->news, $id);
+        $news = [];
 
-        return view('news.index', [
-            'category' => $category,
+        foreach (News::$categories as $item) {
+            if ($item['name'] == $id) {
+                $id = $item['id'];
+            }
+        }
+
+        foreach (News::$news as $item) {
+            if ($item['category_id'] == $id) {
+                $news[$item['id']] = $item;
+            }
+        }
+
+        return view('news.category', [
+            'category' => News::$categories[$id],
             'news' => $news,
         ]);
-    }
-
-    public function getItemById($items, $id)
-    {
-        foreach ($items as $item) {
-            if ($item['id'] == $id) {
-                return $item;
-            }
-        }
-    }
-
-    public function getNewsByCategoryId($items, $category_id)
-    {
-        $new = [];
-
-        foreach ($items as $item) {
-            if ($item['category_id'] == $category_id) {
-                $new[] = $item;
-            }
-        }
-
-        return $new;
     }
 }
