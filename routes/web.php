@@ -19,9 +19,9 @@ Route::group([
     'as' => 'admin.'
 ], function() {
     Route::get('/admin/index', 'IndexController@index')->name('index');
-    Route::get('/news/index', 'NewsController@index')->name('news.index');
-    Route::get('/news/create', 'NewsController@create')->name('news.create');
-    Route::get('/news/update/{id}', 'NewsController@update')->name('news.update');
+    Route::get('/news/', 'NewsController@index')->name('news.index');
+    Route::match(['post', 'get'],'/news/create', 'NewsController@create')->name('news.create');
+    Route::match(['post', 'get'],'/news/update/{id}', 'NewsController@update')->name('news.update');
 });
 
 Route::group([
@@ -35,3 +35,5 @@ Route::group([
 });
 
 Route::get('/contact', 'ContactController@index')->name('contact');
+
+Auth::routes();
