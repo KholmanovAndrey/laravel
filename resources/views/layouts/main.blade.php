@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Страница@yield('title')</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
@@ -28,7 +28,7 @@
                         <a class="nav-link" href="{{ route('news.all') }}">Новости</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact">Контакты</a>
+                        <a class="nav-link" href="{{ route('contact') }}">Контакты</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.index') }}">Админка</a>
