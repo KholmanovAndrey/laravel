@@ -32,7 +32,7 @@
                                     <select id="category_id" class="form-control @error('category_id') is-invalid @enderror" name="category_id" required>
                                         <option value="0">Выберите категорию</option>
                                         @foreach($categories as $item)
-                                            <option @if ($item['id'] == old('category_id')) selected @endif value="{{ $item['id'] }}">{{ $item['title'] }}</option>
+                                            <option @if ($item->id == old('category_id')) selected @endif value="{{ $item->id }}">{{ $item->title }}</option>
                                         @endforeach
                                     </select>
 

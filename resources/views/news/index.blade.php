@@ -11,9 +11,9 @@
             @forelse($news as $item)
                 <article class="news__item col-md-12">
                     <div class="card">
-                        <div class="card-header">{{ $item['title'] }}</div>
+                        <div class="card-header">{{ $item->title }}</div>
                         <div class="card-body">
-                            <a href="{{ route('news.newsOne', ['id' => $item['id']]) }}">Подробнее</a>
+                            <a href="{{ route('news.newsOne', ['id' => $item->id]) }}">Подробнее</a>
                         </div>
                     </div>
                 </article>

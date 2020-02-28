@@ -4,49 +4,51 @@ namespace App\Http\Controllers;
 
 use App\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
     public function news()
     {
-        return view('news.index', ['news' => News::$news]);
+        $news = DB::table('news')->get();
+        return view('news.index', ['news' => $news]);
     }
 
     public function newsOne($id)
     {
-        if (empty(News::$news)){
+        $news = DB::table('news')->find($id);
+
+        if (empty($news)){
             return redirect(route('home'));
         }
 
+        $category = DB::table('category')->find($news->category_id);
+
         return view('news.one', [
-            'news' => News::$news[$id],
-            'category' => News::$categories[News::$news[$id]['category_id']],
+            'news' => $news,
+            'category' => $category,
         ]);
     }
 
     public function categories()
     {
-        return view('news.categories', ['categories' => News::$categories]);
+        $categories = DB::table('category')->get();
+        return view('news.categories', ['categories' => $categories]);
     }
 
     public function categoryId($id)
     {
-        $news = [];
-
-        foreach (News::$categories as $item) {
-            if ($item['name'] == $id) {
-                $id = $item['id'];
-            }
+        $category = DB::table('category')->where('name', '=', $id)->get();
+        if (!empty($category)) {
+            $id = $category->id;
+        } else {
+            $category = DB::table('category')->find($id);
         }
 
-        foreach (News::$news as $item) {
-            if ($item['category_id'] == $id) {
-                $news[$item['id']] = $item;
-            }
-        }
+        $news = DB::table('news')->where('category_id', '=', $id)->get();
 
         return view('news.category', [
-            'category' => News::$categories[$id],
+            'category' => $category,
             'news' => $news,
         ]);
     }

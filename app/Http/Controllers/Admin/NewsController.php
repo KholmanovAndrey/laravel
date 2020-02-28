@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\News;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Storage;
 
 class NewsController extends Controller
@@ -25,37 +26,57 @@ class NewsController extends Controller
                 $url = Storage::url($path);
             }
 
-            $model = News::$news;
-            $id = count($model) + 1;
-            $model[$id]['id'] = $id;
-            $model[$id]['title'] = $request->input('title');
-            $model[$id]['text'] = $request->input('text');
-            $model[$id]['category_id'] = $request->input('category_id');
-            $model[$id]['image'] = $url;
-
-            //$json = response()->json($model)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
-            $json = json_encode($model);
-            $ar = json_decode($json, true);
-            dd($json, $ar, $ar[$id]);
+            if (DB::table('news')->insert([
+                'title' => $request->title,
+                'text' => $request->text,
+                'category_id' => $request->category_id,
+                'image' => $url
+            ])) {
+                return redirect()->route('admin.news.index');
+            }
 
             return redirect()->route('admin.news.create');
         }
 
         return view('admin.news.create', [
-            'categories' => News::$categories
+            'categories' => DB::table('category')->get()
         ]);
     }
 
-    public function update($id)
+    public function update($id, Request $request)
     {
-        if (empty(News::$news)){
+        if ($request->isMethod('post')) {
+            $request->flash();
+
+            $url = null;
+            if ($request->file('image')) {
+                $path = Storage::putFile('public', $request->file('image'));
+                $url = Storage::url($path);
+            }
+
+            if (DB::table('news')->update([
+                'id' => $request->id,
+                'title' => $request->title,
+                'text' => $request->text,
+                'category_id' => $request->category_id,
+                'image' => $url
+            ])) {
+                return redirect()->route('admin.news.index');
+            }
+
+            return redirect()->route('admin.news.update');
+        }
+
+        $news = DB::table('news')->find($id);
+
+        if ($news){
             return redirect()->route('admin.news.index');
         }
 
         return view('admin.news.update', [
-            'news' => News::$news[$id],
-            'category' => News::$categories[News::$news[$id]['category_id']],
-            'categories' => News::$categories
+            'news' => $news,
+            'category' => DB::table('category')->find($news->category_id),
+            'categories' => DB::table('category')->get()
         ]);
     }
 }

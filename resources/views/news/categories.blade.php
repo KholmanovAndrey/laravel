@@ -11,7 +11,7 @@
             @forelse($categories as $item)
                 <article class="news__item col-md-12">
                     <div class="card">
-                        <div class="card-header"> <h2><a href="{{ route('news.categoryId', ['id' => $item['name']]) }}">{{ $item['title'] }}</a></h2></div>
+                        <div class="card-header"> <h2><a href="{{ route('news.categoryId', ['id' => $item->name]) }}">{{ $item->title }}</a></h2></div>
                     </div>
                 </article>
             @empty
