@@ -11,7 +11,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('news')->insert($this->getData());
+        DB::table('category')->insert($this->getData());
     }
 
     private function getData()
@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
                 'title' => $faker->realText(rand(20,50)),
-                'name' => $faker->realText(rand(20,50)),
+                'name' => 'category'.$i,
             ];
         }
         return $data;

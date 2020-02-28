@@ -38,14 +38,15 @@ class NewsController extends Controller
 
     public function categoryId($id)
     {
-        $category = DB::table('category')->where('name', '=', $id)->get();
+        $category = DB::table('category')->where('name', $id)->first();
+
         if (!empty($category)) {
             $id = $category->id;
         } else {
             $category = DB::table('category')->find($id);
         }
 
-        $news = DB::table('news')->where('category_id', '=', $id)->get();
+        $news = DB::table('news')->where('category_id', $id)->get();
 
         return view('news.category', [
             'category' => $category,

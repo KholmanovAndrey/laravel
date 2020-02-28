@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return view('admin.categories.index', [
+        return view('admin.category.index', [
             'categories' => DB::table('category')->get()
         ]);
     }
@@ -39,20 +39,16 @@ class CategoryController extends Controller
         if ($request->isMethod('post')) {
             $request->flash();
 
-            if (DB::table('category')->insert([
-                'id' => $request->id,
+            DB::table('category')->where('id', $id)->update([
                 'title' => $request->title,
                 'name' => $request->name,
-            ])) {
-                return redirect()->route('admin.categories.index');
-            }
-
-            return redirect()->route('admin.category.create');
+            ]);
+            return redirect()->route('admin.categories.index');
         }
 
         $category = DB::table('category')->find($id);
 
-        if ($category){
+        if (empty($category)){
             return redirect()->route('admin.categories.index');
         }
 

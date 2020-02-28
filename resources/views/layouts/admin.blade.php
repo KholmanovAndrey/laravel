@@ -39,6 +39,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.news.index') }}">Новости</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.categories.index') }}">Категории</a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

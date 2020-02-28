@@ -12,7 +12,8 @@ class NewsController extends Controller
 {
     public function index()
     {
-        return view('admin.news.index', ['news' => News::$news]);
+        $news = DB::table('news')->get();
+        return view('admin.news.index', ['news' => $news]);
     }
 
     public function create(Request $request)
@@ -30,7 +31,7 @@ class NewsController extends Controller
                 'title' => $request->title,
                 'text' => $request->text,
                 'category_id' => $request->category_id,
-                'image' => $url
+                'image' => $url?$url:''
             ])) {
                 return redirect()->route('admin.news.index');
             }
@@ -54,22 +55,21 @@ class NewsController extends Controller
                 $url = Storage::url($path);
             }
 
-            if (DB::table('news')->update([
-                'id' => $request->id,
+            $news = DB::table('news')->find($id);
+            $url = $url?$url:$news->image;
+
+            DB::table('news')->where('id', $id)->update([
                 'title' => $request->title,
                 'text' => $request->text,
                 'category_id' => $request->category_id,
                 'image' => $url
-            ])) {
-                return redirect()->route('admin.news.index');
-            }
-
-            return redirect()->route('admin.news.update');
+            ]);
+            return redirect()->route('admin.news.index');
         }
 
         $news = DB::table('news')->find($id);
 
-        if ($news){
+        if (empty($news)){
             return redirect()->route('admin.news.index');
         }
 

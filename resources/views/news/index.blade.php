@@ -13,6 +13,7 @@
                     <div class="card">
                         <div class="card-header">{{ $item->title }}</div>
                         <div class="card-body">
+                            @if($item->image)<div style="background-image: url({{ $item->image }}); width: 100px; height: 50px;"></div>@endif
                             <a href="{{ route('news.newsOne', ['id' => $item->id]) }}">Подробнее</a>
                         </div>
                     </div>

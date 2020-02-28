@@ -8,7 +8,7 @@
             @forelse($categories as $item)
                 <article class="news__item">
                     <h2>{{ $item->title }}</h2>
-                    <a href="{{ route('admin.news.update', ['id' => $item->id]) }}">Редактировать</a>
+                    <a href="{{ route('admin.category.update', ['id' => $item->id]) }}">Редактировать</a>
                 </article>
             @empty
                 <div class="news__item">

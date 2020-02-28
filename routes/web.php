@@ -22,6 +22,9 @@ Route::group([
     Route::get('/news/', 'NewsController@index')->name('news.index');
     Route::match(['post', 'get'],'/news/create', 'NewsController@create')->name('news.create');
     Route::match(['post', 'get'],'/news/update/{id}', 'NewsController@update')->name('news.update');
+    Route::get('/categories/', 'CategoryController@index')->name('categories.index');
+    Route::match(['post', 'get'],'/category/create', 'CategoryController@create')->name('category.create');
+    Route::match(['post', 'get'],'/category/update/{id}', 'CategoryController@update')->name('category.update');
 });
 
 Route::group([
