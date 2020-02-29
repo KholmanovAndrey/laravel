@@ -5,17 +5,17 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Добавить категорию</div>
+                    <div class="card-header">@if (!$category->id) Добавить категорию@else Изменить категорию@endif</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('admin.category.create') }}">
+                        <form method="POST" action="@if (!$category->id){{ route('admin.category.create') }}@else{{ route('admin.category.update', $category) }}@endif">
                             @csrf
 
                             <div class="form-group row">
                                 <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Наименование') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autofocus>
+                                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ $category->title ?? old('title') }}" required autofocus>
 
                                     @error('title')
                                     <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
                                 <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Наименование по-английски') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $category->name ?? old('name') }}" required autofocus>
 
                                     @error('name')
                                     <span class="invalid-feedback" role="alert">

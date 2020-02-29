@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,19 +11,19 @@ class NewsController extends Controller
 {
     public function news()
     {
-        $news = DB::table('news')->get();
+        $news = News::query()->paginate(5);
         return view('news.index', ['news' => $news]);
     }
 
     public function newsOne($id)
     {
-        $news = DB::table('news')->find($id);
+        $news = News::find($id);
 
         if (empty($news)){
             return redirect(route('home'));
         }
 
-        $category = DB::table('category')->find($news->category_id);
+        $category = Category::find($news->category_id);
 
         return view('news.one', [
             'news' => $news,
@@ -32,21 +33,19 @@ class NewsController extends Controller
 
     public function categories()
     {
-        $categories = DB::table('category')->get();
-        return view('news.categories', ['categories' => $categories]);
+        return view('news.categories', ['categories' => Category::all()]);
     }
 
     public function categoryId($id)
     {
-        $category = DB::table('category')->where('name', $id)->first();
-
+        $category = Category::query()->where('name', $id)->first();
         if (!empty($category)) {
             $id = $category->id;
         } else {
-            $category = DB::table('category')->find($id);
+            $category = Category::find($id);
         }
 
-        $news = DB::table('news')->where('category_id', $id)->get();
+        $news = News::query()->where('category_id', $id)->get();
 
         return view('news.category', [
             'category' => $category,

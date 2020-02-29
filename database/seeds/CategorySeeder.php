@@ -11,14 +11,14 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('category')->insert($this->getData());
+        DB::table('categories')->insert($this->getData());
     }
 
     private function getData()
     {
         $faker = Faker\Factory::create('ru_RU');
         $data = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 1; $i < 3; $i++) {
             $data[] = [
                 'title' => $faker->realText(rand(20,50)),
                 'name' => 'category'.$i,

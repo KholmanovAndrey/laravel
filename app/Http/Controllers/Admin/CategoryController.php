@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
+use App\News;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -12,48 +14,55 @@ class CategoryController extends Controller
     public function index()
     {
         return view('admin.category.index', [
-            'categories' => DB::table('category')->get()
+            'categories' => Category::all()
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request, Category $category)
     {
         if ($request->isMethod('post')) {
             $request->flash();
 
-            if (DB::table('category')->insert([
-                'title' => $request->title,
-                'name' => $request->name,
-            ])) {
+            $category->fill($request->all());
+            if ($category->save()) {
                 return redirect()->route('admin.categories.index');
             }
 
             return redirect()->route('admin.category.create');
         }
 
-        return view('admin.category.create');
+        return view('admin.category.form', [
+            'category' => $category,
+        ]);
     }
 
-    public function update($id, Request $request)
+    public function update(Request $request, Category $category)
     {
         if ($request->isMethod('post')) {
             $request->flash();
 
-            DB::table('category')->where('id', $id)->update([
-                'title' => $request->title,
-                'name' => $request->name,
-            ]);
+            $category->fill($request->all());
+            $category->save();
             return redirect()->route('admin.categories.index');
         }
-
-        $category = DB::table('category')->find($id);
 
         if (empty($category)){
             return redirect()->route('admin.categories.index');
         }
 
-        return view('admin.category.update', [
+        return view('admin.category.form', [
             'category' => $category,
         ]);
+    }
+
+    public function delete(Category $category)
+    {
+        if (empty($category)){
+            return redirect()->route('admin.categories.index');
+        }
+
+        $category->delete();
+
+        return redirect()->route('admin.categories.index');
     }
 }
