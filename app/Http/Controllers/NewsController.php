@@ -45,7 +45,8 @@ class NewsController extends Controller
             $category = Category::find($id);
         }
 
-        $news = News::query()->where('category_id', $id)->get();
+        //$news = News::query()->where('category_id', $id)->get();
+        $news = Category::query()->find($id)->getNews()->pagitation(5);
 
         return view('news.category', [
             'category' => $category,

@@ -23,12 +23,16 @@ class CategoryController extends Controller
         if ($request->isMethod('post')) {
             $request->flash();
 
+            $this->validate($request, Category::rules());
+
             $category->fill($request->all());
             if ($category->save()) {
-                return redirect()->route('admin.categories.index');
+                return redirect()->route('admin.categories.index')
+                    ->with('success', 'Категория успешно добавлена!');
             }
 
-            return redirect()->route('admin.category.create');
+            return redirect()->route('admin.category.form')
+                ->with('success', 'Ошибка добавления категории!');
         }
 
         return view('admin.category.form', [
@@ -41,9 +45,16 @@ class CategoryController extends Controller
         if ($request->isMethod('post')) {
             $request->flash();
 
+            $this->validate($request, Category::rules());
+
             $category->fill($request->all());
-            $category->save();
-            return redirect()->route('admin.categories.index');
+            if ($category->save()) {
+                return redirect()->route('admin.categories.index')
+                    ->with('success', 'Категория успешно изменена!');
+            }
+
+            return redirect()->route('admin.category.form')
+                ->with('success', 'Ошибка изменения категории!');
         }
 
         if (empty($category)){
