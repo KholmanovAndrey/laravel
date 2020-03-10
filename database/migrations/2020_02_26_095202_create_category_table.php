@@ -19,6 +19,7 @@ class CreateCategoryTable extends Migration
             $table->string('name')->comment('Заголовок новости');
             $table->timestamps();
         });
+        (new CategorySeeder())->run();
     }
 
     /**

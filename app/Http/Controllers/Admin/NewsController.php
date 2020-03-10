@@ -22,6 +22,7 @@ class NewsController extends Controller
         if ($request->isMethod('post')) {
             $request->flash();
 
+            $this->validate($request, News::rules());
             $news->fill($request->all());
 
             if ($request->file('image')) {
@@ -30,10 +31,14 @@ class NewsController extends Controller
             }
 
             if ($news->save()) {
-                return redirect()->route('admin.news.index');
+                return redirect()
+                    ->route('admin.news.index')
+                    ->with('success', 'Новость успешно добавлена!');
             }
 
-            return redirect()->route('admin.news.create');
+            return redirect()
+                ->route('admin.news.form')
+                ->with('success', 'Ошибка добавления новости!');
         }
 
         return view('admin.news.form', [
@@ -47,6 +52,8 @@ class NewsController extends Controller
         if ($request->isMethod('post')) {
             $request->flash();
 
+            $this->validate($request, News::rules());
+
             $url = null;
             if ($request->file('image')) {
                 $path = Storage::putFile('public', $request->file('image'));
@@ -56,8 +63,15 @@ class NewsController extends Controller
 
             $news->fill($request->all());
             $news->image = $url;
-            $news->save();
-            return redirect()->route('admin.news.index');
+            if ($news->save()) {
+                return redirect()
+                    ->route('admin.news.index')
+                    ->with('success', 'Новость успешно изменена!');
+            }
+
+            return redirect()
+                ->route('admin.news.form')
+                ->with('success', 'Ошибка изменения новости!');
         }
 
         if (empty($news)){
