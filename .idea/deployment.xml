@@ -2,7 +2,7 @@
 <project version="4">
   <component name="PublishConfigData">
     <serverData>
-      <paths name="yii2basic.gb">
+      <paths name="yii2basic.bg">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
