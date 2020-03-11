@@ -2,49 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
+use App\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
-    private $categories = [
-        [
-            'id' => 1,
-            'title' => 'Category 1'
-        ],
-        [
-            'id' => 2,
-            'title' => 'Category 2'
-        ],
-    ];
-
-    private $news = [
-        [
-            'id' => 1,
-            'category_id' => 1,
-            'title' => 'News 1',
-            'text' => 'This one news and it\'s very good'
-        ],
-        [
-            'id' => 2,
-            'category_id' => 2,
-            'title' => 'News 2',
-            'text' => 'This second news and it\'s bad'
-        ],
-    ];
-
     public function news()
     {
-        return view('news.index', ['news' => $this->news]);
+        $news = News::query()->paginate(5);
+        return view('news.index', ['news' => $news]);
     }
 
     public function newsOne($id)
     {
-        $news = $this->getItemById($this->news, $id);
-        $category = $this->getItemById($this->categories, $news['category_id']);
+        $news = News::query()->find($id);
 
         if (empty($news)){
             return redirect(route('home'));
         }
+
+        $category = Category::query()->find($news->category_id);
 
         return view('news.one', [
             'news' => $news,
@@ -54,39 +33,24 @@ class NewsController extends Controller
 
     public function categories()
     {
-        return view('news.categories', ['categories' => $this->categories]);
+        return view('news.categories', ['categories' => Category::all()]);
     }
 
-    public function category($id)
+    public function categoryId($id)
     {
-        $category = $this->getItemById($this->categories, $id);
-        $news = $this->getNewsByCategoryId($this->news, $id);
+        $category = Category::query()->where('name', $id)->first();
+        if (!empty($category)) {
+            $id = $category->id;
+        } else {
+            $category = Category::query()->find($id);
+        }
 
-        return view('news.index', [
+        //$news = News::query()->where('category_id', $id)->get();
+        $news = Category::query()->find($id)->getNews()->paginate(5);
+
+        return view('news.category', [
             'category' => $category,
             'news' => $news,
         ]);
-    }
-
-    public function getItemById($items, $id)
-    {
-        foreach ($items as $item) {
-            if ($item['id'] == $id) {
-                return $item;
-            }
-        }
-    }
-
-    public function getNewsByCategoryId($items, $category_id)
-    {
-        $new = [];
-
-        foreach ($items as $item) {
-            if ($item['category_id'] == $category_id) {
-                $new[] = $item;
-            }
-        }
-
-        return $new;
     }
 }
