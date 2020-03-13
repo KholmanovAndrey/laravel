@@ -1,18 +1,29 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title')
+    Новости
+@endsection
 
 @section('content')
-    <h1>Новости сайта</h1>
-
-    <section class="news">
-        <?php
-        foreach ($news as $item) {
-        ?>
-        <article class="news__item">
-            <h2><a href="{{ route('news.newsOne', ['id' => $item['id']]) }}">{{ $item['title'] }}</a></h2>
-        </article>
-        <?php
-        }
-        ?>
-    </section>
-
+    <div class="container">
+        <div class="news row justify-content-center">
+            <h1>Новости</h1>
+            @forelse($news as $item)
+                <article class="news__item col-md-12">
+                    <div class="card">
+                        <div class="card-header">{{ $item->title }}</div>
+                        <div class="card-body">
+                            @if($item->image)<div style="background-image: url({{ $item->image }}); width: 100px; height: 50px;"></div>@endif
+                            <a class="btn btn-info" href="{{ route('news.newsOne', ['id' => $item->id]) }}">Подробнее</a>
+                        </div>
+                    </div>
+                </article>
+            @empty
+                <div class="news__item">
+                    <h2>Нет новостей</h2>
+                </div>
+            @endforelse
+            {{ $news->links() }}
+        </div>
+    </div>
 @endsection
