@@ -51,10 +51,10 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="text" class="col-md-4 col-form-label text-md-right">{{ __('Текст') }}</label>
+                                <label for="my-editor" class="col-md-4 col-form-label text-md-right">{{ __('Текст') }}</label>
 
                                 <div class="col-md-6">
-                                    <textarea name="text" id="text" cols="30" rows="10" class="form-control @error('text') is-invalid @enderror" required>{{ $news->text ?? old('text') }}</textarea>
+                                    <textarea name="text" id="my-editor" cols="30" rows="10" class="form-control @error('text') is-invalid @enderror" required>{!! $news->text ?? old('text') !!}</textarea>
 
                                     @error('text')
                                     <span class="invalid-feedback" role="alert">
@@ -91,5 +91,16 @@
             </div>
         </div>
     </div>
-
+    <script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
+    <script>
+        var options = {
+            filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+            filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+            filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+        };
+    </script>
+    <script>
+        CKEDITOR.replace('my-editor', options);
+    </script>
 @endsection

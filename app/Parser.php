@@ -2,9 +2,24 @@
 
 namespace App;
 
-abstract class Parser
+use Orchestra\Parser\Xml\Facade as XmlParser;
+
+class Parser
 {
-    abstract public function parser();
+    public function parser($link)
+    {
+        $xml = XmlParser::load($link);
+        $data = $xml->parse([
+            'title' => ['uses' => 'channel.title'],
+            'link' => ['uses' => 'channel.link'],
+            'description' => ['uses' => 'channel.description'],
+            'image' => ['uses' => 'channel.image.url'],
+            'news' => ['uses' => 'channel.item[title,link,guid,description,pubDate]']
+        ]);
+
+        $category = $this->addCategory($data);
+        $this->addNews($data, $category->id);
+    }
 
     /**
      * Add News

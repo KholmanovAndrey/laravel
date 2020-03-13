@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CategorySeeder extends Seeder
+class ResourcesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,15 +11,18 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert($this->getData());
+        DB::table('resources')->insert($this->getData());
     }
 
     private function getData()
     {
         $data[] = [
-            'title' => 'Спорт',
-            'name' => 'sport',
+            'link' => 'https://news.yandex.ru/auto.rss',
         ];
+        $data[] = [
+            'link' => 'https://news.mail.ru/rss/politics/',
+        ];
+
         return $data;
     }
 }
