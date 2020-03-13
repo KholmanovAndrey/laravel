@@ -11,6 +11,12 @@
 |
 */
 
+Route::get('/auth/vk', 'LoginController@loginVK')->name('vkLogin');
+Route::get('/auth/vk/response', 'LoginController@responseVK')->name('vkResponse');
+
+Route::get('/auth/fb', 'LoginController@loginFb')->name('fbLogin');
+Route::get('/auth/fb/response', 'LoginController@responseFb')->name('fbResponse');
+
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::group([
@@ -19,7 +25,8 @@ Route::group([
     'as' => 'admin.',
     'middleware' => ['auth', 'is_admin']
 ], function() {
-    Route::get('/admin/index', 'IndexController@index')->name('index');
+    Route::get('/parser', 'ParserController@index')->name('parser');
+    Route::get('/index', 'IndexController@index')->name('index');
     Route::get('/news/', 'NewsController@index')->name('news.index');
     Route::match(['post', 'get'],'/news/create', 'NewsController@create')->name('news.create');
     Route::match(['post', 'get'],'/news/update/{news}', 'NewsController@update')->name('news.update');

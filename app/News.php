@@ -26,7 +26,7 @@ class News extends Model
     {
         $tableCategory = (new Category())->getTable();
         return [
-            'title' => 'required|min:5|max:30',
+            'title' => 'required|min:5|max:250',
             'text' => 'required',
             'category_id' => "required|exists:{$tableCategory},id",
             'image' => 'mimes:jpeg,bmp,png|max:1000'
