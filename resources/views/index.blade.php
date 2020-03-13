@@ -1,5 +1,11 @@
-@extends('layouts.main')
+@extends('layouts.app')
+
+@section('title')
+    Главная
+@endsection
 
 @section('content')
-    Добро позаловать на сайт новостей
+    <div class="container">
+        <h1>Добро пожаловать на сайт новостей</h1>
+    </div>
 @endsection
